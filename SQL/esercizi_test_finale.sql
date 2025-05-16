@@ -1,3 +1,5 @@
+--9
+
 select customer_id
 	from customer
 		where active = 1
@@ -38,3 +40,32 @@ select film.film_id
 					group by film.film_id
 	
 --15
+select rental_rate
+	,category_id
+	,rating
+		from film
+			inner join film_category
+				on film.film_id= film_category.film_id
+					where category_id = 11
+						group by film.rental_rate, film_category.category_id,rating
+							order by rental_rate desc
+
+--16
+select film.film_id
+	,round(avg(film.length)) as lunghezza_media
+	,avg(rental_rate) as rental_medio
+	,actor_id
+	from film
+		inner join film_actor
+			on film.film_id = film_actor.film_id
+			where film.length < 100
+				group by film.film_id,film_actor.actor_id,film.length
+					order by rental_medio desc
+						limit 10
+
+--17
+select 
+	from film
+		inner join category
+			on film.film_id = category.film_id
+				
