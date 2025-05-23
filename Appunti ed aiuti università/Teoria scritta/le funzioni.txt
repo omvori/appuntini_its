@@ -1,0 +1,52 @@
+Le funzioni in C devono essere scritte prima del main in quanto il file viene compilano in maniera sequenziale 
+pertanto, per evitare problemi di dichiarazione implicita o altro, la funzione va scritta prima del main.
+
+
+
+#include <stdio.h> 
+
+float CalcolaSomma(float a, float b ) 
+	{	
+	return (a+b);
+	}
+
+
+
+int main(int argc, char **argv)
+	{
+	float somma;
+	float a=15.0,b=16.0;
+
+	somma=CalcolaSomma(a,b);
+
+	printf(" la somma è %f ", somma);	
+	return 0;
+	}
+
+
+Una funzione che non ritorna niente quindi non ha il comando return,  è di tipo void. 
+
+Se non si vuole scrivere tutta la funzione sopra il main, si può  scrivere il prototipo della funzione che verrà poi scritta sotto il main .
+
+#include <stdio.h> 
+
+float CalcolaSomma(float a, float b );  --> questo è il prototipo,  nel prototipo va specificato in tipo delle variabili.  Alla fine del prototipo va il ; 
+
+
+int main(int argc, char **argv)
+	{
+	float somma;
+	float a=15.0,b=16.0;
+
+	somma=CalcolaSomma(a,b);
+
+	printf(" la somma è %f ", somma);	
+	return 0;
+	}
+
+
+float CalcolaSomma(float a, float b )
+	{	
+	return (a+b);
+	}
+

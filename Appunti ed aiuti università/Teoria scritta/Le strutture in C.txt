@@ -1,0 +1,48 @@
+In C posso creare delle strutture , ovvero dei " nuovi tipi " di dati 
+Le strutture permettono di implementare in C delle strutture che sono presenti 
+normalmente su python ma che in C non esistono.Le strutture possono avere dati di tipi diversi.
+
+P.S : in C non esistono il tipo Booleano, i dizionari e le stringhe.
+
+Una struttura va dichiarata prima del main 
+
+struct punto 
+{
+	float x; ---> vengono chiamati campi della struct 
+	float y; 
+}; --> vuole il ; alla fine 
+
+ora nel main, se vogliamo creare una variabile di tipo nodo, devo scrivere 
+
+int main() 
+{
+	struct punto p; 
+
+}
+
+tuttavia posso abbreviare il nome del nuovo tipo di dato 
+
+attraverso la funzione typedef.
+
+typedef struct punto punto ; 
+
+IN GENERALE : typedef struttura_nome    nuovo_nome  
+
+ottenendo :
+
+int main() 
+{
+	 punto p; 
+
+}
+
+Per accedere ad un campo della struttura uso l'operatore (.) 
+
+int main() 
+{
+	 punto p={3.0,4.7}; 
+	 punto a;
+	 a.x=2.0;
+	 a.y=3.0;
+
+}

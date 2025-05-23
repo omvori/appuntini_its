@@ -1,0 +1,107 @@
+In C i vettori sono delle torture di proporzioni bibliche.
+
+In C i vettori sono dei puntatori che puntano a un blocco di memoria in cui vengono 
+successivamente allocati tutti gli elementi del vettore. 
+
+
+un generico vettore in C si inizializza nel main con 
+
+int main () 
+	{
+	int a[10]; 
+	}
+
+IN GENERALE :  tipo nome_vettore[numero_elementi]
+
+
+posso anche inizializzare un vettore indicando tutti i suoi elementi : 
+
+
+int main () 
+	{
+	int b[]={50,1,4,9,61}; 
+	}
+
+
+per gestire la quantità di memoria da allocare al vettore e 
+per creare delle funzioni che ritornino dei vettori abbiamo bisogno delle funzioni  malloc e sizeof. 
+
+sizeof indica la quantità di byte utilizzata da un determinato element0 
+
+Es. sizeof(int) ---> 4 byte 
+
+malloc è una funzione della libreria <stdlib.h> quindi dobbiamo scrivere #include <stdlib.h> all'inizio del file 
+
+malloc permette di allocare della memoria che viene rilasciata solo quando il programma si arresta 
+quindi crea un blocco di memoria persistente che viene rilasciato solo quando chiudiamo tutto e ci permette di +
+tenere allorati i dati dei vettori. La sintassi per dichiarare un vettore con malloc è:
+
+
+int main () 
+	{
+	int *b= malloc(10*(sizeof(int)); ---> crea un vettore di 10 elementi di tipo INT dal peso complessivo di 40 byte
+	}
+
+IN GENERALE:
+
+int main () 
+	{
+	tipo *nome_vettore= malloc(g*(sizeof(tipo)); 
+	g=numero elementi;
+	tipo del vettore ("INT,FLOAT, etc..");
+	}
+
+
+Le funzioni che restituiscono vettori In C hanno il prototito con l'* 
+Es. 
+	int *somme_parziali(int [], int);
+
+	
+	int *somme_parziali(int x[], int n)
+	{
+	int i, somme = 0;
+	int *s = malloc(n*sizeof(int)); ---> equivalente a int s[n]
+	 
+	 
+	 for( i = 0; i < n; i++){
+		somme += x[i];
+		s[i] = somme;
+	 }
+	 
+	 return s; 
+	}
+
+
+int main () 
+	{
+	int n=10;
+	int *b = malloc(n*sizeof(int));
+	int *somme =somme_parziali(b, n);
+	
+	for(int i = 0; i < n; i++){
+		printf("%d\n", *(somme+i)); --> equivale a  somme[i]
+	 }
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

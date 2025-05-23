@@ -1,0 +1,52 @@
+Le variabili di tipo puntatore puntano a un indirizzo di memoria dove è allocato il valore della variabile
+
+int main() 
+	{
+	float pi=3.14;
+	float *x, *y;  queste sono variabili di tipo puntatore.
+	float *z;
+	
+	con il comando :
+	x=&pi  --->  assegno a x l'indirizzo di memoria, in esadecimale,  dove è allocato il valore 3.14
+
+	printf("%p\n", x); --> stampa l'indirizzo della cella in esadecimale 
+
+	per ottenere il valore del ploat a cui punta x, si utilizza il comando : *x
+	
+	printf("%f\n", *x); --> stampa del valore dell'elemento puntato da x 
+	}
+
+
+int main() 
+	{
+	float pi=3.14;
+	float *x, *y;  queste sono variabili di tipo puntatore.
+	float *z;
+	
+	x=&pi  
+
+	printf("%p\n", x);   ----> output:0x7fff679bc4bc
+	
+	printf("%f\n", *x);  ---> output: 3.140000
+	}
+
+
+Importante: dato che x contiene un indirizzo di memoria, se faccio:
+
+y=x  --> con x=3.14 
+
+*y+=1; ---> y=3.14+1  ---> 4.14
+
+printf(" il valore di x è %f\n", *x); ---> output: il valore di x è 4.14
+
+
+*y è uguale a *x perché ho assegnato a y la stessa cella di x 
+quindi viene incrementato di 1 lo stesso valore che era stato assegnato a x 
+
+
+
+
+
+
+
+

@@ -1,0 +1,68 @@
+È possibile passare alcuni valori dalla riga di comando ai programmi C quando vengono eseguiti. Questi valori sono chiamati argomenti della riga di comando e molte volte sono importanti per il tuo programma soprattutto quando vuoi controllare il tuo programma dall'esterno invece di codificare quei valori all'interno del codice.
+
+Gli argomenti della riga di comando vengono gestiti utilizzando gli argomenti della funzione main() dove argc si riferisce al numero di argomenti passati e argv[] è un array di puntatori che punta a ciascun argomento passato al programma. Di seguito è riportato un semplice esempio che controlla se è presente qualche argomento fornito dalla riga di comando e agisce di conseguenza -
+
+#include <stdio.h>
+
+int main( int argc, char *argv[] )  {
+
+   if( argc == 2 ) {
+      printf("The argument supplied is %s\n", argv[1]);
+   }
+   else if( argc > 2 ) {
+      printf("Too many arguments supplied.\n");
+   }
+   else {
+      printf("One argument expected.\n");
+   }
+}
+Quando il codice precedente viene compilato ed eseguito con un singolo argomento, produce il seguente risultato.
+
+$./a.out testing
+The argument supplied is testing
+Quando il codice precedente viene compilato ed eseguito con due argomenti, produce il seguente risultato.
+
+$./a.out testing1 testing2
+Too many arguments supplied.
+Quando il codice precedente viene compilato ed eseguito senza passare alcun argomento, produce il seguente risultato.
+
+$./a.out
+One argument expected
+Va notato che argv[0] contiene il nome del programma stesso e argv [1] è un puntatore al primo argomento della riga di comando fornito e *argv[n] è l'ultimo argomento. Se non vengono forniti argomenti, argc sarà uno e se passi un argomento allora argc viene impostato su 2.
+
+Si passano tutti gli argomenti della riga di comando separati da uno spazio, ma se l'argomento stesso ha uno spazio è possibile passare tali argomenti inserendoli tra virgolette doppie "" o virgolette singole ''. Riscriviamo ancora una volta l'esempio precedente in cui stamperemo il nome del programma e passeremo anche un argomento della riga di comando inserendo tra virgolette doppie −
+
+#include <stdio.h>
+
+int main( int argc, char *argv[] )  {
+
+   printf("Program name %s\n", argv[0]);
+ 
+   if( argc == 2 ) {
+      printf("The argument supplied is %s\n", argv[1]);
+   }
+   else if( argc > 2 ) {
+      printf("Too many arguments supplied.\n");
+   }
+   else {
+      printf("One argument expected.\n");
+   }
+}
+Quando il codice precedente viene compilato ed eseguito con un singolo argomento separato da uno spazio ma racchiuso tra virgolette doppie, produce il seguente risultato.
+
+$./a.out "testing1 testing2"
+
+Program name ./a.out
+The argument supplied is testing1 testing2
+
+
+P.S i nomi int argc, char *argv[] possono essere cambiati in quello che ti pare 
+
+tipo il prof li nomina int n e char *args[]
+
+
+
+
+
+
+

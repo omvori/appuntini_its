@@ -1,0 +1,7 @@
+sscanf è una funzione che prende  una stringa 
+e la converte rispetto a un formato che inserisce un utente 
+
+sscanf(stringa, tipo di tag uguale a printf)
+sscanf(stringa,tag tipo )
+ dal terzo tag in poi servono per indicare dove salvare i dati letti da sscanf
+i tag di sscanf sono gli stessi di printf
