@@ -1,0 +1,62 @@
+# src/research_crew/config/tasks.yaml
+research_task:
+  description: >
+    Conduct thorough research on {topic}. Focus on:
+    1. Key concepts and definitions
+    2. Historical development and recent trends
+    3. Major challenges and opportunities
+    4. Notable applications or case studies
+    5. Future outlook and potential developments
+
+    Make sure to organize your findings in a structured format with clear sections.
+  expected_output: >
+    A comprehensive research document with well-organized sections covering
+    all the requested aspects of {topic}. Include specific facts, figures,
+    and examples where relevant.
+  agent: researcher
+
+analysis_task:
+  description: >
+    Analyze the research findings and create a comprehensive report on {topic}.
+    Your report should:
+    1. Begin with an executive summary
+    2. Include all key information from the research
+    3. Provide insightful analysis of trends and patterns
+    4. Offer recommendations or future considerations
+    5. Be formatted in a professional, easy-to-read style with clear headings
+  expected_output: >
+    A polished, professional report on {topic} that presents the research
+    findings with added analysis and insights. The report should be well-structured
+    with an executive summary, main sections, and conclusion.
+  agent: analyst
+  context:
+    - research_task
+  output_file: output/report.md  
+
+
+querier:
+  role: >
+    Database researcher about the {topic}
+  goal: >
+    find informations about the {topic} in the connected database
+  backstory: >
+    You are an expert in SQL language and can find query in very fast time
+    you are an experienced user and they all rely on you
+  llm: gemini/gemini-2.5-flash-lite
+
+analyst:
+  role: >
+    Data Analyst and Report Writer for {topic}
+  goal: >
+    Analyze research findings and create a comprehensive, well-structured
+    report that presents insights in a clear and engaging way
+  backstory: >
+    You are a skilled analyst with a background in data interpretation
+    and technical writing. You have a talent for identifying patterns
+    and extracting meaningful insights from research data, then
+    communicating those insights effectively through well-crafted reports.
+  llm: gemini/gemini-2.5-flash-lite  # e.g. openai/gpt-4o, google/gemini-2.0-flash, anthropic/claude...
+
+
+
+
