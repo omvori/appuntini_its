@@ -1,0 +1,3 @@
+{
+  "ticket": "The final answer is the JSON object formatted according to the user's request.```json\n{\n    \"passeggero\": {\n        \"nome\": \"Anthony\",\n        \"cognome\": \"Martial\"\n    },\n    \"destinazione\": \"Monaco\",\n    \"data\": \"2026-10-10\",\n    \"numero_conferma\": \"\"\n}\n```"
+}
