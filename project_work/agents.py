@@ -1,48 +1,50 @@
-from crewai import Agent,LLM,crew
-from langchain.tools import tool
-from langchain_community.tools.sql_database.tool import (
-    InfoSQLDatabaseTool,
-    ListSQLDatabaseTool,
-    QuerySQLCheckerTool,
-    QuerySQLDatabaseTool)
-from config import db
+from crewai import Agent, LLM, Task
+from config import list_tables_tool, tables_schema_tool, execute_sql_tool, gemini_llm
 
-gemini_llm = LLM(model="gemini/gemini-2.5-flash", api_key="AIzaSyBqNeHTwiMlK-V2vFwr0O_FyNU7tCgm3pM")
-
-
-@tool("list_tables")
-def list_tables_tool() -> str:
-    """List the available tables in the DB."""
-    return ListSQLDatabaseTool(db=db).invoke("")
-
-@tool("tables_schema")
-def tables_schema_tool(tables: str) -> str:
-    """Show schema & sample rows for the given tables (comma-separated)."""
-    return InfoSQLDatabaseTool(db=db).invoke(tables)
-
-@tool("execute_sql")
-def execute_sql_tool(sql_query: str) -> str:
-    """Execute a SQL query against the DB. Returns the result as a string."""
-    return QuerySQLDatabaseTool(db=db).invoke(sql_query)
-
-@tool("check_sql")
-def check_sql_tool(sql_query: str) -> str:
-    """Check if the SQL query is correct. Returns suggestions/fixes or success message."""
-    try:
-        query_checker_tool = QuerySQLCheckerTool(db=db, llm=gemini_llm)
-        return query_checker_tool.invoke(sql_query)
-    except Exception as e:
-        return f"Error using QuerySQLCheckerTool: {str(e)}"
-
-
-#run del tool 
-
-sql_querier = Agent(
-    role="Ricercatore di informazioni",
-    goal="USANDO I TOOL forniti, raccogliere informazioni sulle persone contenute nella tabella utenti",
-    backstory="Esperto di documentazione, specializzato nella ricerca e nell'analisi di dati strutturati",
+# Agents
+welcome_agent = Agent(
+    role="Client Welcoming Agent",
+    goal="Welcome the client and gather flight booking information in this order: destination, name, surname, preferred date",
+    backstory="You are an experienced flight assistant, excellent at making people comfortable and very organized",
     llm=gemini_llm,
-    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool, check_sql_tool],
-    verbose=True
+    verbose=True,
+    allow_delegation=False
 )
 
+sql_querier = Agent(
+    role="Database Query Specialist",
+    goal="Use the provided tools to query or insert data into the database based on user requirements. YOU MUST USE THE TOOLS PROVIDED.",
+    backstory="Expert in database operations and SQL queries, specialized in structured data analysis",
+    llm=gemini_llm,
+    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool],  
+    verbose=True,
+    allow_delegation=False
+)
+
+output_agent = Agent(
+    role="Ticket Formatter",
+    goal="Format flight booking information into a clear, readable ticket for the client",
+    backstory="You are a machine that emits flight tickets in a clean and comprehensible way",
+    llm=gemini_llm,
+    allow_delegation=False
+)
+
+# Tasks BASE
+welcome_task = Task(
+    description="Welcome the client and gather the following information in order: 1) Flight destination, 2) Name, 3) Surname, 4) Preferred flight date.",
+    expected_output="All collected information formatted for database operations.",
+    agent=welcome_agent
+)
+
+query_task = Task(
+    description="Use the database tools to query or insert flight booking information.",
+    expected_output="Database query results or confirmation of data insertion.",
+    agent=sql_querier,
+    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool]  
+)
+
+output_task = Task(
+    description="Format the flight booking information into a clear, readable ticket.",
+    expected_output="A clear flight ticket description and JSON representation.",
+    agent=output_agent
+)
