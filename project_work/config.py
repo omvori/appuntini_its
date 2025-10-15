@@ -7,7 +7,11 @@ from langchain_community.tools.sql_database.tool import (
     QuerySQLDatabaseTool)
 
 # Configurazione database
-db = SQLDatabase.from_uri("postgresql://postgres:admin@localhost:5432/project_fly", schema="project_fly,public")
+db = SQLDatabase.from_uri(
+    "postgresql://postgres:admin@localhost:5432/project_voli", 
+    schema="public",
+    sample_rows_in_table_info=0  # Ottimizzazione opzionale
+)
 gemini_llm = LLM(model="gemini/gemini-2.5-flash-lite", api_key="AIzaSyCnYceW0CMqKlGoFaiI6hW4Qq61Cwga9m8")
 
 # Verifica connessione
@@ -37,12 +41,22 @@ class TableSchemaTool(BaseTool):
 
 class ExecuteQueryTool(BaseTool):
     name: str = "execute_sql_tool"
-    description: str = "Useful for executing SQL queries on the database"
+    description: str = "Useful for executing SQL queries on the database (SELECT, INSERT, UPDATE, DELETE)"
     
     def _run(self, query: str) -> str:
-        tool = QuerySQLDatabaseTool(db=db)
-        return tool.run(query)
-
+        try:
+            # Usa db.run() che gestisce automaticamente i commit
+            result = db.run(query)
+            
+            # Se è una INSERT/UPDATE/DELETE, conferma l'operazione
+            if query.strip().upper().startswith(('INSERT', 'UPDATE', 'DELETE')):
+                return f"Query eseguita con successo: {result if result else 'Operazione completata'}"
+            
+            return str(result)
+            
+        except Exception as e:
+            return f"Errore: {str(e)}"
+        
 # Istanze tool
 list_tables_tool = ListTablesTool()
 tables_schema_tool = TableSchemaTool()
