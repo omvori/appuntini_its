@@ -12,11 +12,11 @@ welcome_agent = Agent(
 )
 
 sql_querier = Agent(
-    role="Database Query Specialist",
-    goal="Use the provided tools to query or insert data into the database based on user requirements. YOU MUST USE THE TOOLS PROVIDED.",
-    backstory="Expert in database operations and SQL queries, specialized in structured data analysis",
+    role="Database Insert Specialist",
+    goal="Insert user flight booking data into the 'passeggeri' table using SQL INSERT or the SELECT * FROM commands",
+    backstory="Expert in database operations and SQL queries, specialized in structured data insertion",
     llm=gemini_llm,
-    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool],  
+    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool],
     verbose=True,
     allow_delegation=False
 )
@@ -37,14 +37,35 @@ welcome_task = Task(
 )
 
 query_task = Task(
-    description="Use the database tools to query or insert flight booking information.",
-    expected_output="Database query results or confirmation of data insertion.",
+    description='''
+    DATI DA PROCESSARE: {richiesta}
+    
+    STEP OBBLIGATORI:
+    1. Dividi {richiesta} usando la virgola: [destinazione, nome, cognome, data]
+       Esempio: "Roma,Andrea,Cazzi,10-20-2027" diventa ['Roma', 'Andrea', 'Cazzi', '10-20-2027']
+    
+    2. Converti la data:
+       - Input: MM-DD-YYYY o DD-MM-YYYY
+       - Output: YYYY-MM-DD
+       Esempio: "10-20-2027" diventa "2027-10-20"
+    
+    3. CHIAMA execute_sql_tool con questa query (sostituisci con i valori estratti):
+       INSERT INTO passeggeri (destinazione, nome, cognome, data_viaggio) 
+       VALUES ('Roma', 'Andrea', 'Cazzi', '2027-10-20');
+    
+    4. CHIAMA execute_sql_tool per verificare:
+       SELECT * FROM passeggeri ORDER BY id DESC LIMIT 1;
+    
+    IMPORTANTE: Usa i valori REALI da {richiesta}, non i placeholder!
+    ''',
     agent=sql_querier,
-    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool]  
+    expected_output='Dati del record inserito (destinazione, nome, cognome, data, id)',
+    tools=[list_tables_tool, tables_schema_tool, execute_sql_tool]
 )
+
 
 output_task = Task(
     description="Format the flight booking information into a clear, readable ticket.",
-    expected_output="A clear flight ticket description and JSON representation.",
-    agent=output_agent
+    expected_output="Valid JSON string that can be directly parsed",
+    agent=output_agent,
 )
