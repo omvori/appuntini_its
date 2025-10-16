@@ -1,0 +1,42 @@
+select * from passeggeri;
+
+CREATE TABLE voli (
+    id varchar(4) PRIMARY KEY,
+    numero_volo VARCHAR(10) UNIQUE NOT NULL,
+    destinazione VARCHAR(100) NOT NULL,
+    partenza_da VARCHAR(100) NOT NULL,
+    data_partenza DATE NOT NULL,
+    ora_partenza TIME NOT NULL,
+    posti_totali INTEGER NOT NULL,
+    posti_disponibili INTEGER NOT NULL,
+    compagnia_aerea VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+drop table passeggeri;
+
+
+create table passeggeri(
+	id varchar(4) PRIMARY KEY,
+	flight_destination varchar(100),
+	nome varchar(100),
+	cognome varchar(100),
+	preferred_flight_date date not null
+);
+
+select * from passeggeri;
+
+select * from voli
+select * from prenotazioni
+
+CREATE TABLE prenotazioni (
+    id varchar(4) PRIMARY KEY,
+    passeggero_id varchar(4) NOT NULL,
+    numero_prenotazione VARCHAR(20) UNIQUE NOT NULL,
+    data_prenotazione DATE DEFAULT CURRENT_DATE,
+    numero_posti INTEGER DEFAULT 1,
+    classe VARCHAR(20) DEFAULT 'Economy',
+    prezzo_totale DECIMAL(10,2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'Confermata',
+   
+    FOREIGN KEY (passeggero_id) REFERENCES passeggeri(id) ON DELETE CASCADE
+);
