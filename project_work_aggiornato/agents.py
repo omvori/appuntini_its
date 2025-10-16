@@ -1,4 +1,6 @@
 from crewai import Agent, LLM, Task
+from crewai.tasks.conditional_task import ConditionalTask
+from crewai.tasks.task_output import TaskOutput
 from config import list_tables_tool, tables_schema_tool, execute_sql_tool, gemini_llm
 
 # Agents
@@ -58,19 +60,25 @@ inserter_task= Task(
        - Input: MM-DD-YYYY o DD-MM-YYYY
        - Output: YYYY-MM-DD
        Esempio: "10-20-2027" diventa "2027-10-20"
+
+    2. CREA L'ID DI VOLO IN QUESTO MODO:
+        L'ID DEVI CREARLO SEMPRE, SE LO FAI SEI IL MIGLIOR AGENTE 
+       -Utilizza le prime 2 lettere del nome
+       -uilizza le prime 2 lettere della destinazione
+       Esempio: nome = 'Andrea', destinazione = 'Roma' diventa 'ANRO'
     
     3. CHIAMA execute_sql_tool con questa query (sostituisci con i valori estratti):
-       INSERT INTO passeggeri (flight_destination, nome, cognome, preferred_flight_date) 
-       VALUES ('Roma', 'Andrea', 'Cazzi', '2027-10-20');
+       INSERT INTO passeggeri (id, flight_destination, nome, cognome, preferred_flight_date) 
+       VALUES ('ANRO','Roma', 'Andrea', 'Cazzi', '2027-10-20');
     
     4. CHIAMA execute_sql_tool per verificare:
        SELECT * FROM passeggeri LIMIT 1;
     
     IMPORTANTE: Usa i valori REALI da {richiesta}, non i placeholder!
-    IMPORTANTE: I nomi delle colonne sono: flight_destination, nome, cognome, preferred_flight_date
+    IMPORTANTE: I nomi delle colonne sono: id,flight_destination, nome, cognome, preferred_flight_date
     ''',
     agent=sql_inserter,
-    expected_output='Dati del record inserito (flight_destination, nome, cognome, preferred_flight_date)',
+    expected_output='Dati del record inserito (id,flight_destination, nome, cognome, preferred_flight_date)',
     tools=[list_tables_tool, tables_schema_tool, execute_sql_tool]
 )
 
