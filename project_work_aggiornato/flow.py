@@ -4,8 +4,6 @@ from agents import welcome_agent, sql_inserter,sql_asker, output_agent
 from agents import welcome_task,inserter_task,output_task,asker_task
 from config import list_tables_tool, tables_schema_tool, execute_sql_tool
 
-
-
 class Flow_fly(Flow):
     @start()
     def start_to_ex(self):
@@ -64,10 +62,13 @@ class Flow_fly(Flow):
             
             Restituisci il risultato in formato JSON con questa struttura:
             {{
+            ======================FLY TICKET======================
                 "passeggero": {{"nome": "", "cognome": ""}},
                 "destinazione": "",
                 "data": "",
-                "numero_conferma": ""
+                "id":""
+             ====================================================
+
             }}
             
             IMPORTANTE: Usa SOLO i dati forniti sopra, non inventare informazioni!
