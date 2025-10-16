@@ -7,6 +7,7 @@ from langchain_community.tools.sql_database.tool import (
     ListSQLDatabaseTool,
     QuerySQLDatabaseTool)
 
+
 # Configurazione database
 db = SQLDatabase.from_uri(
     "postgresql://postgres:admin@localhost:5432/project_fly", 
@@ -22,6 +23,8 @@ try:
     print(tables)
 except Exception as e:
     print("Errore di connessione al database:", e)
+        
+
 
 # Tools CrewAI compatibili
 class ListTablesTool(BaseTool):
